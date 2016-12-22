@@ -15,10 +15,10 @@ class LoginForm extends Component {
     const value = forms.accountInput.value;
     const account = this.props.Accounts.Accounts
     
-    if (account.indexOf(value) === -1) {
-      console.log('Error! Incorrect Account Number');
-      return;
-    }
+    // if (account.indexOf(value) === -1) {
+    //   console.log('Error! Incorrect Account Number');
+    //   return;
+    // }
     
     this.props.setActiveAccount(value);
     browserHistory.push('/');
