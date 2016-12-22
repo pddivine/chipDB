@@ -30,13 +30,16 @@ contract EthDb {
     return tblTemp;
   }
 
+  // Retrieve list of tables
   function getTableNames () returns (bytes32[]) {
     return tableNames;
   }
 
   // Create row on table
   function createRow (bytes32 tableName, bytes32[] newRow) {
-    if (tables[tableName].length == 0) { return; }
+    if (tables[tableName].length == 0) {
+      return;
+    }
     tables[tableName].push(newRow);
   }
 
@@ -51,18 +54,20 @@ contract EthDb {
     int8 changeIndex = -1;
 
     for (uint i = 0; i < tables[tableName][0].length; i++) {
-    if (tables[tableName][0][i] == searchColName) {
+      if (tables[tableName][0][i] == searchColName) {
         searchIndex = int8(i);
       }
-    if(tables[tableName][0][i] == colName) {
+      if (tables[tableName][0][i] == colName) {
         changeIndex = int8(i);
       }
     }
-   if (searchIndex == -1 || changeIndex == -1) { return; }
+    if (searchIndex == -1 || changeIndex == -1) {
+      return;
+    }
 
     for (uint j = 1; j < tables[tableName].length; j++) {
-    if (tables[tableName][j][uint(searchIndex)] == searchVal) {
-    tables[tableName][j][uint(changeIndex)] = value;
+      if (tables[tableName][j][uint(searchIndex)] == searchVal) {
+        tables[tableName][j][uint(changeIndex)] = value;
       }
     }
   }
@@ -76,10 +81,12 @@ contract EthDb {
         columnIndex = int8(i);
       }
     }
-    if (columnIndex == -1) return;
+    if (columnIndex == -1) {
+      return;
+    }
 
-    for(uint j = 1; j < tables[tableName].length; j++) {
-      if(tables[tableName][j][uint(columnIndex)] == searchVal) {
+    for (uint j = 1; j < tables[tableName].length; j++) {
+      if (tables[tableName][j][uint(columnIndex)] == searchVal) {
         removeRowHelper(tableName, j);
         j--;
       }
@@ -88,12 +95,14 @@ contract EthDb {
 
   // Helper remove row
   function removeRowHelper(bytes32 tableName, uint index)  returns(uint[]) {
-    if (index >= tables[tableName].length) return;
-
-    for (uint i = index; i<tables[tableName].length-1; i++){
-      tables[tableName][i] = tables[tableName][i+1];
+    if (index >= tables[tableName].length) {
+      return;
     }
-    delete tables[tableName][tables[tableName].length-1];
+
+    for (uint i = index; i<tables[tableName].length - 1; i++){
+      tables[tableName][i] = tables[tableName][i + 1];
+    }
+    delete tables[tableName][tables[tableName].length - 1];
     tables[tableName].length--;
   }
 
@@ -107,7 +116,9 @@ contract EthDb {
       }
     }
 
-    if (index == -1) { return; }
+    if (index == -1) {
+      return;
+    }
 
     for (uint j = 1; j < tables[tableName].length; j++) {
       if (tables[tableName][j][uint(index)] == value) {
