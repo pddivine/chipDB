@@ -7,7 +7,12 @@ contract EthDb {
   bytes32[] tblTemp;
   mapping (bytes32 => bytes32[][]) tables;
 
-  // Create table
+  /**
+   * Create a new table within the database.
+   * @param tableName Name of new table.
+   * @param schema Definition of table schema.
+   * @param dataTypes Definition of schema data types.
+   */
   function createTable (bytes32 tableName, bytes32[] schema, bytes32[] dataTypes) {
     for (uint i = 0; i < tableNames.length; i++) {
       if (tableName == tableNames[i]) {
@@ -19,7 +24,11 @@ contract EthDb {
     tables[tableName].push(dataTypes);
   }
 
-  // Read full table
+  /**
+   * Read entire contents of table.
+   * @param tableName Name of new table.
+   * @return Flattened table contents.
+   */
   function readTable (bytes32 tableName) returns (bytes32[]) {
     tables[tableName];
     for (uint i = 0; i < tables[tableName].length; i++) {
@@ -30,12 +39,19 @@ contract EthDb {
     return tblTemp;
   }
 
-  // Retrieve list of tables
+  /**
+   * Get table names.
+   * @return Table names.
+   */
   function getTableNames () returns (bytes32[]) {
     return tableNames;
   }
 
-  // Create row on table
+  /**
+   * Create a new row in a table.
+   * @param tableName Name of table to create row.
+   * @param newRow Definitions of new row data.
+   */
   function createRow (bytes32 tableName, bytes32[] newRow) {
     if (tables[tableName].length == 0) {
       return;
@@ -43,12 +59,23 @@ contract EthDb {
     tables[tableName].push(newRow);
   }
 
-  // Get table's width
+  /**
+   * Get width of a table.
+   * @param tableName Name of desired table.
+   * @return Width of table.
+   */
   function getTblWidth (bytes32 tableName) returns (uint) {
     return tables[tableName][0].length;
   }
 
-  // Update the Table
+  /**
+   * Search through matched records and update a field.
+   * @param tableName Name of desired table.
+   * @param searchColName Search column name.
+   * @param searchVal Search value.
+   * @param colName Column name to update.
+   * @param value Value to update field.
+   */
   function updateTable (bytes32 tableName, bytes32 searchColName, bytes32 searchVal, bytes32 colName, bytes32 value) {
     int8 searchIndex = -1;
     int8 changeIndex = -1;
@@ -72,7 +99,12 @@ contract EthDb {
     }
   }
 
-  // Remove row
+  /**
+   * Delete a table row via matched column name and value.
+   * @param tableName Name of desired table.
+   * @param searchColName Search column name.
+   * @param searchVal Search value.
+   */
   function removeRow(bytes32 tableName, bytes32 searchColName, bytes32 searchVal) {
     int8 columnIndex = -1;
 
@@ -93,7 +125,11 @@ contract EthDb {
     }
   }
 
-  // Helper remove row
+  /**
+   * Helper function called by removeRow function that deletes a specific row
+   * @param tableName Name of desired table.
+   * @param index Row to delete.
+   */
   function removeRowHelper(bytes32 tableName, uint index)  returns(uint[]) {
     if (index >= tables[tableName].length) {
       return;
@@ -106,7 +142,13 @@ contract EthDb {
     tables[tableName].length--;
   }
 
-  //Search Table
+  /**
+   * Query data by row and value in table
+   * @param tableName Name of desired table.
+   * @param colName Column to search.
+   * @param value Value to match.
+   * @return Matched rows.
+   */
   function searchTable(bytes32 tableName, bytes32 colName, bytes32 value) returns(bytes32[]) {
     int8 index = -1;
 
